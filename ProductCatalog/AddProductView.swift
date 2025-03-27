@@ -44,21 +44,43 @@ struct AddProductView: View {
         }
         .navigationTitle("Add New Product")
     }
-    
     private func addProduct() {
-        let newProduct = Product(context: viewContext)
-        newProduct.productID = Int64(Date().timeIntervalSince1970)
-        newProduct.productName = productName
-        newProduct.productDescription = productDescription
-        newProduct.productPrice = NSDecimalNumber(string: productPrice)
-        newProduct.productProvider = productProvider
-        
-        do {
-            try viewContext.save()
-            presentationMode.wrappedValue.dismiss()
-        } catch {
-            print("Error saving product: \(error)")
+            let newProduct = Product(context: viewContext)
+            newProduct.productID = Int64(Date().timeIntervalSince1970)
+            newProduct.productName = productName
+            newProduct.productDescription = productDescription
+            newProduct.productPrice = NSDecimalNumber(string: productPrice)
+            newProduct.productProvider = productProvider
+            
+            do {
+                try viewContext.save()
+                presentationMode.wrappedValue.dismiss()
+            } catch {
+                print("Error saving product: \(error)")
+            }
         }
+    }
+struct CustomTextField: View {
+    @Binding var text: String
+    var placeholder: String
+    var icon: String
+    var keyboardType: UIKeyboardType = .default
+    
+    var body: some View {
+        HStack {
+            Image(systemName: icon)
+                .foregroundColor(.white)
+                .padding(.leading, 10)
+            
+            TextField(placeholder, text: $text)
+                .keyboardType(keyboardType)
+                .padding()
+                .background(Color.white.opacity(0.2))
+                .cornerRadius(10)
+                .foregroundColor(.white)
+                .autocapitalization(.none)
+        }
+        .padding(.horizontal)
     }
 }
 
@@ -67,4 +89,22 @@ struct AddProductView_Previews: PreviewProvider {
         AddProductView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
+
+                
+                Button(action: addProduct) {
+                    Text("Add Product")
+                        .font(.title2)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.teal]), startPoint: .leading, endPoint: .trailing))
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .shadow(radius: 5)
+                }
+                .padding(.horizontal)
+            }
+            .padding()
+        }
+        .navigationTitle("Add New Product")
+    }
 

@@ -2,22 +2,21 @@ import SwiftUI
 import CoreData
 
 struct AddProductView: View {
-    
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) var presentationMode
-    
+
     @State private var productName = ""
     @State private var productDescription = ""
     @State private var productPrice = ""
     @State private var productProvider = ""
-    
+
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.3)]),
                            startPoint: .topLeading,
                            endPoint: .bottomTrailing)
                 .edgesIgnoringSafeArea(.all)
-            
+
             VStack(spacing: 18) {
                 Text("✨ Add a New Product ✨")
                     .font(.title)
@@ -25,12 +24,12 @@ struct AddProductView: View {
                     .foregroundColor(.white)
                     .shadow(radius: 5)
                     .padding(.bottom, 10)
-                
+
                 CustomTextField(text: $productName, placeholder: "Product Name", icon: "cart")
                 CustomTextField(text: $productDescription, placeholder: "Product Description", icon: "text.alignleft")
                 CustomTextField(text: $productPrice, placeholder: "Product Price", icon: "dollarsign.circle", keyboardType: .decimalPad)
                 CustomTextField(text: $productProvider, placeholder: "Product Provider", icon: "person")
-                
+
                 Button(action: addProduct) {
                     Text("Add Product")
                         .font(.headline)
@@ -53,7 +52,7 @@ struct AddProductView: View {
         }
         .navigationTitle("Add New Product")
     }
-    
+
     private func addProduct() {
         let newProduct = Product(context: viewContext)
         newProduct.productID = Int64(Date().timeIntervalSince1970)
@@ -61,45 +60,13 @@ struct AddProductView: View {
         newProduct.productDescription = productDescription
         newProduct.productPrice = NSDecimalNumber(string: productPrice)
         newProduct.productProvider = productProvider
-        
+
         do {
             try viewContext.save()
             presentationMode.wrappedValue.dismiss()
         } catch {
             print("Error saving product: \(error)")
         }
-    }
-}
-
-struct CustomTextField: View {
-    @Binding var text: String
-    var placeholder: String
-    var icon: String
-    var keyboardType: UIKeyboardType = .default
-    
-    var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundColor(Color.blue)
-                .padding(.leading, 12)
-            
-            TextField(placeholder, text: $text)
-                .keyboardType(keyboardType)
-                .padding()
-                .background(Color.white)
-                .overlay(RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.blue, lineWidth: 2))
-                .cornerRadius(8)
-                .foregroundColor(.primary)
-                .autocapitalization(.none)
-        }
-        .padding(.horizontal)
-    }
-}
-
-struct AddProductView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddProductView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
 

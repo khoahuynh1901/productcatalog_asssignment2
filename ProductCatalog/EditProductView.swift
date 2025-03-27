@@ -3,82 +3,77 @@ import CoreData
 
 struct EditProductView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Binding var product: Product
+    @Environment(\.presentationMode) var presentationMode
+
+    @ObservedObject var product: Product
+
     @State private var productName: String
     @State private var productDescription: String
     @State private var productPrice: String
     @State private var productProvider: String
-    
-    init(product: Binding<Product>) {
-        _product = product
-        _productName = State(initialValue: product.wrappedValue.productName ?? "")
-        _productDescription = State(initialValue: product.wrappedValue.productDescription ?? "")
-        _productPrice = State(initialValue: product.wrappedValue.productPrice?.stringValue ?? "")
-        _productProvider = State(initialValue: product.wrappedValue.productProvider ?? "")
+
+    init(product: Product) {
+        _product = ObservedObject(wrappedValue: product)
+        _productName = State(initialValue: product.productName ?? "")
+        _productDescription = State(initialValue: product.productDescription ?? "")
+        _productPrice = State(initialValue: product.productPrice?.stringValue ?? "")
+        _productProvider = State(initialValue: product.productProvider ?? "")
     }
-    
+
     var body: some View {
-        VStack {
-            TextField("Product Name", text: $productName)
-                .padding()
-                .background(RoundedRectangle(cornerRadius: 10).strokeBorder())
-            
-            TextField("Product Description", text: $productDescription)
-                .padding()
-                .background(RoundedRectangle(cornerRadius: 10).strokeBorder())
-            
-            TextField("Product Price", text: $productPrice)
-                .keyboardType(.decimalPad)
-                .padding()
-                .background(RoundedRectangle(cornerRadius: 10).strokeBorder())
-            
-            TextField("Product Provider", text: $productProvider)
-                .padding()
-                .background(RoundedRectangle(cornerRadius: 10).strokeBorder())
-            
-            Button("Save Changes") {
-                saveChanges()
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.3)]),
+                           startPoint: .topLeading,
+                           endPoint: .bottomTrailing)
+                .edgesIgnoringSafeArea(.all)
+
+            VStack(spacing: 18) {
+                Text("✨ Edit Product ✨")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .shadow(radius: 5)
+                    .padding(.bottom, 10)
+
+                CustomTextField(text: $productName, placeholder: "Product Name", icon: "cart")
+                CustomTextField(text: $productDescription, placeholder: "Product Description", icon: "text.alignleft")
+                CustomTextField(text: $productPrice, placeholder: "Product Price", icon: "dollarsign.circle", keyboardType: .decimalPad)
+                CustomTextField(text: $productProvider, placeholder: "Product Provider", icon: "person")
+
+                Button(action: saveChanges) {
+                    Text("Save Changes")
+                        .font(.headline)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]),
+                                                   startPoint: .leading,
+                                                   endPoint: .trailing))
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .shadow(color: Color.purple.opacity(0.4), radius: 8, x: 0, y: 4)
+                }
+                .padding(.horizontal)
             }
             .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
+            .background(Color.white.opacity(0.9))
+            .cornerRadius(15)
+            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+            .padding()
         }
-        .padding()
         .navigationTitle("Edit Product")
     }
-    
+
     private func saveChanges() {
-        // Update the product with the edited values
         product.productName = productName
         product.productDescription = productDescription
-        if let price = Float(productPrice) {
-            product.productPrice = NSDecimalNumber(value: price)
-        }
+        product.productPrice = NSDecimalNumber(string: productPrice)
         product.productProvider = productProvider
-        
-        // Save the changes to CoreData
+
         do {
             try viewContext.save()
-            print("Product updated successfully.")
+            presentationMode.wrappedValue.dismiss()
         } catch {
-            print("Error saving product: \(error)")
-        }
-    }
-}
-
-struct EditProductView_Previews: PreviewProvider {
-    static var previews: some View {
-        //Product to preview
-        let context = PersistenceController.preview.container.viewContext
-        let product = Product(context: context)
-        product.productName = "Sample Product"
-        product.productDescription = "Sample Description"
-        product.productPrice = NSDecimalNumber(value: 19.99)
-        product.productProvider = "Sample Provider"
-        
-        return NavigationView {
-            EditProductView(product: .constant(product))
+            print("Error saving changes: \(error)")
         }
     }
 }

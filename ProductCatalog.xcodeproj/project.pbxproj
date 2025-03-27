@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		A26548592D94C8E500D78DFA /* ProductCatalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProductCatalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A26548592D94C8E500D78DFA /* ProductCatalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = ProductCatalog.app; path = "/Users/Khoah/Documents/School/Year-3-(Final Year)/winter2025/IOS DEV/ProductCatalog/build/Debug-iphoneos/ProductCatalog.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,16 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				A265485B2D94C8E500D78DFA /* ProductCatalog */,
-				A265485A2D94C8E500D78DFA /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		A265485A2D94C8E500D78DFA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A26548592D94C8E500D78DFA /* ProductCatalog.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,7 +86,7 @@
 			mainGroup = A26548502D94C8E500D78DFA;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = A265485A2D94C8E500D78DFA /* Products */;
+			productRefGroup = A26548502D94C8E500D78DFA;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

@@ -114,7 +114,7 @@ struct ProductListView: View {
 
                         Spacer()
                         
-                        // Delete Button (added check)
+                        // Delete Button
                         Button(action: {
                             withAnimation {
                                 deleteProduct(product)
@@ -137,30 +137,21 @@ struct ProductListView: View {
             .listStyle(PlainListStyle())
 
             // Add Product Button
-            NavigationLink(destination: AddProductView()) {
-                Text("➕ Add Product")
-                    .bold()
+            NavigationLink(destination: EditProductView(product: products[currentIndex])) {
+                Text("Edit Product")
+                    .font(.headline)
+                    .foregroundColor(.blue)
                     .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.teal]), startPoint: .leading, endPoint: .trailing))
-                    .foregroundColor(.white)
+                    .background(Color.white)
                     .cornerRadius(10)
-                    .shadow(radius: 4)
+                    .shadow(radius: 5)
             }
-            .padding()
         }
-        .navigationTitle("Products")
+        .padding()
     }
 
-    private var filteredProducts: [Product] {
-        if searchText.isEmpty {
-            return Array(products)
-        } else {
-            return products.filter { product in
-                product.productName?.lowercased().contains(searchText.lowercased()) ?? false ||
-                product.productDescription?.lowercased().contains(searchText.lowercased()) ?? false
-            }
-        }
+    private func filterProducts() {
+        // Filtering logic to update `products`
     }
 
     private func deleteProduct(_ product: Product) {
@@ -169,6 +160,12 @@ struct ProductListView: View {
             try viewContext.save()
         } catch {
             print("Error deleting product: \(error)")
+        }
+    }
+
+    private var filteredProducts: [Product] {
+        products.filter { product in
+            product.productName?.lowercased().contains(searchText.lowercased()) ?? false
         }
     }
 }

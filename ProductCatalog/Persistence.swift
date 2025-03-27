@@ -23,8 +23,8 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
 
-       //Creating Mock Data
-        for _ in 0..<10{
+        // Creating mock data
+        for _ in 0..<10 {
             let newProduct = Product(context: viewContext)
             newProduct.productID = Int64(Date().timeIntervalSince1970)
             newProduct.productName = "Sample Product"
@@ -34,9 +34,10 @@ struct PersistenceController {
         }
         do {
             try viewContext.save()
-        }catch{
-            fatalError("Unresolved erorr: \(error), \(error.localizedDescription)")
+        } catch {
+            fatalError("Unresolved error: \(error), \(error.localizedDescription)")
         }
         return result
     }()
 }
+

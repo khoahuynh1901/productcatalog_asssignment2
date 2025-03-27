@@ -27,19 +27,22 @@ struct AddProductView: View {
                 CustomTextField(text: $productDescription, placeholder: "Product Description", icon: "text.alignleft")
                 CustomTextField(text: $productPrice, placeholder: "Product Price", icon: "dollarsign.circle.fill", keyboardType: .decimalPad)
                 CustomTextField(text: $productProvider, placeholder: "Product Provider", icon: "person.fill")
-            
-            Button(action: addProduct) {
-                Text("Add Product")
-                    .font(.title)
-                    .padding()
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                
+                Button(action: addProduct) {
+                    Text("Add Product")
+                        .font(.title2)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.teal]), startPoint: .leading, endPoint: .trailing))
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .shadow(radius: 5)
+                }
+                .padding(.horizontal)
             }
             .padding()
         }
         .navigationTitle("Add New Product")
-        .padding()
     }
     
     private func addProduct() {

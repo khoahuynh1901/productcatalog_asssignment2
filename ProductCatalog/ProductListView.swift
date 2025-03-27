@@ -1,4 +1,3 @@
-ProductListView
 import SwiftUI
 import CoreData
 
@@ -63,13 +62,14 @@ struct ProductListView: View {
                     .padding()
             }
             
+            //Search Product
             TextField("Search Products", text: $searchText)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .onChange(of: searchText) { _ in
+                .onChange(of: searchText) { _, _ in
                     filterProducts()
                 }
-            
+
             List {
                 ForEach(filteredProducts.prefix(10), id: \.productID) { product in
                     VStack(alignment: .leading) {
@@ -116,7 +116,7 @@ struct ProductListView: View {
     }
 
     private func filterProducts() {
-        // This can be customized to implement the actual search functionality
+        
     }
 
     private func deleteProduct(_ product: Product) {

@@ -114,30 +114,18 @@ struct ProductListView: View {
 
                         Spacer()
                         
-                        HStack {
-                            // Edit Button
-                            NavigationLink(destination: EditProductView(product: product)) {
-                                Image(systemName: "pencil.circle.fill")
-                                    .foregroundColor(.blue)
-                                    .padding(10)
-                                    .background(Color.white)
-                                    .clipShape(Circle())
-                                    .shadow(radius: 4)
+                        // Delete Button (added check)
+                        Button(action: {
+                            withAnimation {
+                                deleteProduct(product)
                             }
-
-                            // Delete Button
-                            Button(action: {
-                                withAnimation {
-                                    deleteProduct(product)
-                                }
-                            }) {
-                                Image(systemName: "trash")
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .background(Color.red)
-                                    .clipShape(Circle())
-                                    .shadow(radius: 4)
-                            }
+                        }) {
+                            Image(systemName: "trash")
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.red)
+                                .clipShape(Circle())
+                                .shadow(radius: 4)
                         }
                     }
                     .padding(8)
@@ -174,8 +162,6 @@ struct ProductListView: View {
             }
         }
     }
-
-    private func filterProducts() {}
 
     private func deleteProduct(_ product: Product) {
         viewContext.delete(product)

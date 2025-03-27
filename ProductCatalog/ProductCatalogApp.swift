@@ -13,10 +13,8 @@ struct ProductCatalogApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                ProductListView()
-                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
-            }
+            ContentView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }

@@ -3,59 +3,64 @@ import CoreData
 
 struct AddProductView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.presentationMode) var presentationMode
-
     @State private var productName = ""
     @State private var productDescription = ""
     @State private var productPrice = ""
     @State private var productProvider = ""
 
     var body: some View {
-        ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.3)]),
-                           startPoint: .topLeading,
-                           endPoint: .bottomTrailing)
-                .edgesIgnoringSafeArea(.all)
+        VStack {
+            Text("Add Product")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding()
+                .foregroundColor(.purple)
 
-            VStack(spacing: 18) {
-                Text("✨ Add a New Product ✨")
-                    .font(.title)
+            TextField("Product Name", text: $productName)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+                .background(Color.white)
+                .cornerRadius(8)
+
+            TextField("Product Description", text: $productDescription)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+                .background(Color.white)
+                .cornerRadius(8)
+
+            TextField("Product Price", text: $productPrice)
+                .keyboardType(.decimalPad)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+                .background(Color.white)
+                .cornerRadius(8)
+
+            TextField("Product Provider", text: $productProvider)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+                .background(Color.white)
+                .cornerRadius(8)
+
+            Button(action: addProduct) {
+                Text("Save Product")
                     .fontWeight(.bold)
+                    .padding()
+                    .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.blue]), startPoint: .leading, endPoint: .trailing))
                     .foregroundColor(.white)
-                    .shadow(radius: 5)
-                    .padding(.bottom, 10)
-
-                CustomTextField(text: $productName, placeholder: "Product Name", icon: "cart")
-                CustomTextField(text: $productDescription, placeholder: "Product Description", icon: "text.alignleft")
-                CustomTextField(text: $productPrice, placeholder: "Product Price", icon: "dollarsign.circle", keyboardType: .decimalPad)
-                CustomTextField(text: $productProvider, placeholder: "Product Provider", icon: "person")
-
-                Button(action: addProduct) {
-                    Text("Add Product")
-                        .font(.headline)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]),
-                                                   startPoint: .leading,
-                                                   endPoint: .trailing))
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .shadow(color: Color.purple.opacity(0.4), radius: 8, x: 0, y: 4)
-                }
-                .padding(.horizontal)
+                    .cornerRadius(8)
+                    .padding()
             }
-            .padding()
-            .background(Color.white.opacity(0.9))
-            .cornerRadius(15)
-            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
-            .padding()
+            .disabled(productName.isEmpty || productPrice.isEmpty || productProvider.isEmpty)
+            .shadow(radius: 10)
+
+            Spacer()
         }
-        .navigationTitle("Add New Product")
+        .padding()
+        .background(LinearGradient(gradient: Gradient(colors: [Color.purple.opacity(0.2), Color.blue.opacity(0.2)]), startPoint: .top, endPoint: .bottom))
     }
 
     private func addProduct() {
         let newProduct = Product(context: viewContext)
-        newProduct.productID = Int64(Date().timeIntervalSince1970)
         newProduct.productName = productName
         newProduct.productDescription = productDescription
         newProduct.productPrice = NSDecimalNumber(string: productPrice)
@@ -63,10 +68,17 @@ struct AddProductView: View {
 
         do {
             try viewContext.save()
-            presentationMode.wrappedValue.dismiss()
         } catch {
-            print("Error saving product: \(error)")
+            print("Error saving product: \(error.localizedDescription)")
         }
+
+        // Reset fields after saving
+        productName = ""
+        productDescription = ""
+        productPrice = ""
+        productProvider = ""
+
+        // Go back to the home page
     }
 }
 

@@ -13,53 +13,64 @@ struct AddProductView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing)
+            LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.3)]),
+                           startPoint: .topLeading,
+                           endPoint: .bottomTrailing)
                 .edgesIgnoringSafeArea(.all)
             
-            VStack(spacing: 15) {
-                Text("Add a New Product")
-                    .font(.largeTitle)
+            VStack(spacing: 18) {
+                Text("✨ Add a New Product ✨")
+                    .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
-                    .padding(.bottom, 20)
+                    .shadow(radius: 5)
+                    .padding(.bottom, 10)
                 
-                CustomTextField(text: $productName, placeholder: "Product Name", icon: "cart.fill")
+                CustomTextField(text: $productName, placeholder: "Product Name", icon: "cart")
                 CustomTextField(text: $productDescription, placeholder: "Product Description", icon: "text.alignleft")
-                CustomTextField(text: $productPrice, placeholder: "Product Price", icon: "dollarsign.circle.fill", keyboardType: .decimalPad)
-                CustomTextField(text: $productProvider, placeholder: "Product Provider", icon: "person.fill")
+                CustomTextField(text: $productPrice, placeholder: "Product Price", icon: "dollarsign.circle", keyboardType: .decimalPad)
+                CustomTextField(text: $productProvider, placeholder: "Product Provider", icon: "person")
                 
                 Button(action: addProduct) {
                     Text("Add Product")
-                        .font(.title2)
+                        .font(.headline)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.teal]), startPoint: .leading, endPoint: .trailing))
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]),
+                                                   startPoint: .leading,
+                                                   endPoint: .trailing))
                         .foregroundColor(.white)
                         .cornerRadius(12)
-                        .shadow(radius: 5)
+                        .shadow(color: Color.purple.opacity(0.4), radius: 8, x: 0, y: 4)
                 }
                 .padding(.horizontal)
             }
             .padding()
+            .background(Color.white.opacity(0.9))
+            .cornerRadius(15)
+            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+            .padding()
         }
         .navigationTitle("Add New Product")
     }
+    
     private func addProduct() {
-            let newProduct = Product(context: viewContext)
-            newProduct.productID = Int64(Date().timeIntervalSince1970)
-            newProduct.productName = productName
-            newProduct.productDescription = productDescription
-            newProduct.productPrice = NSDecimalNumber(string: productPrice)
-            newProduct.productProvider = productProvider
-            
-            do {
-                try viewContext.save()
-                presentationMode.wrappedValue.dismiss()
-            } catch {
-                print("Error saving product: \(error)")
-            }
+        let newProduct = Product(context: viewContext)
+        newProduct.productID = Int64(Date().timeIntervalSince1970)
+        newProduct.productName = productName
+        newProduct.productDescription = productDescription
+        newProduct.productPrice = NSDecimalNumber(string: productPrice)
+        newProduct.productProvider = productProvider
+        
+        do {
+            try viewContext.save()
+            presentationMode.wrappedValue.dismiss()
+        } catch {
+            print("Error saving product: \(error)")
         }
     }
+}
+
 struct CustomTextField: View {
     @Binding var text: String
     var placeholder: String
@@ -69,15 +80,17 @@ struct CustomTextField: View {
     var body: some View {
         HStack {
             Image(systemName: icon)
-                .foregroundColor(.white)
-                .padding(.leading, 10)
+                .foregroundColor(Color.blue)
+                .padding(.leading, 12)
             
             TextField(placeholder, text: $text)
                 .keyboardType(keyboardType)
                 .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(10)
-                .foregroundColor(.white)
+                .background(Color.white)
+                .overlay(RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.blue, lineWidth: 2))
+                .cornerRadius(8)
+                .foregroundColor(.primary)
                 .autocapitalization(.none)
         }
         .padding(.horizontal)
@@ -89,22 +102,4 @@ struct AddProductView_Previews: PreviewProvider {
         AddProductView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
-
-                
-                Button(action: addProduct) {
-                    Text("Add Product")
-                        .font(.title2)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.teal]), startPoint: .leading, endPoint: .trailing))
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .shadow(radius: 5)
-                }
-                .padding(.horizontal)
-            }
-            .padding()
-        }
-        .navigationTitle("Add New Product")
-    }
 

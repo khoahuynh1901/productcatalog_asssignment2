@@ -114,18 +114,30 @@ struct ProductListView: View {
 
                         Spacer()
                         
-                        // Delete Button
-                        Button(action: {
-                            withAnimation {
-                                deleteProduct(product)
+                        HStack {
+                            // Edit Button
+                            NavigationLink(destination: EditProductView(product: product)) {
+                                Image(systemName: "pencil.circle.fill")
+                                    .foregroundColor(.blue)
+                                    .padding(10)
+                                    .background(Color.white)
+                                    .clipShape(Circle())
+                                    .shadow(radius: 4)
                             }
-                        }) {
-                            Image(systemName: "trash")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.red)
-                                .clipShape(Circle())
-                                .shadow(radius: 4)
+
+                            // Delete Button
+                            Button(action: {
+                                withAnimation {
+                                    deleteProduct(product)
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(Color.red)
+                                    .clipShape(Circle())
+                                    .shadow(radius: 4)
+                            }
                         }
                     }
                     .padding(8)

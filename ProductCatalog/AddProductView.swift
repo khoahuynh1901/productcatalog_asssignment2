@@ -12,23 +12,21 @@ struct AddProductView: View {
     @State private var productProvider = ""
     
     var body: some View {
-        VStack {
-            TextField("Product Name", text: $productName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                .edgesIgnoringSafeArea(.all)
             
-            TextField("Product Description", text: $productDescription)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            TextField("Product Price", text: $productPrice)
-                .keyboardType(.decimalPad)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            TextField("Product Provider", text: $productProvider)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+            VStack(spacing: 15) {
+                Text("Add a New Product")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(.bottom, 20)
+                
+                CustomTextField(text: $productName, placeholder: "Product Name", icon: "cart.fill")
+                CustomTextField(text: $productDescription, placeholder: "Product Description", icon: "text.alignleft")
+                CustomTextField(text: $productPrice, placeholder: "Product Price", icon: "dollarsign.circle.fill", keyboardType: .decimalPad)
+                CustomTextField(text: $productProvider, placeholder: "Product Provider", icon: "person.fill")
             
             Button(action: addProduct) {
                 Text("Add Product")
